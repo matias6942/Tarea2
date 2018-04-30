@@ -21,8 +21,6 @@
 <h2>Listado con los 5 últimos artículos Ingresados</h2>
 
 <!--Tabla de 5 articulos-->
-
-
 <?php
 
 $host = "127.0.0.1";
