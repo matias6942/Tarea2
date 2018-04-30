@@ -25,20 +25,25 @@
 
 <?php
 
-$serverName = "localhost";
-$userName = "root";
+$host = "127.0.0.1";
+$username = "client";
 $password = "";
+$db = "articleList";
+$port = "3306";
 
 // Create connection
-$conn = new mysqli($serverName, $userName, $password);
-//$conn = new mysqli();
-
-echo "Checking Connection to MySQL DataBase";
+$conn = new mysqli($host, $username, $password);
 
 // Check connection
 if ($conn -> connect_error){
     die("Connection failed! ". $conn->connect_error);
 }
+
+echo "Connected Successfully";
+
+
+
+/**
 
 $sql = "SELECT * FROM articles";
 $result = $conn->query($sql);
@@ -59,6 +64,7 @@ else {
 }
 $conn->close();
 echo "Finish!"
+ */
 ?>
 
 
