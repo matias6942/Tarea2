@@ -39,28 +39,14 @@ if ($conn -> connect_error){
 
 echo "Connected Successfully<br><br>";
 
-/**
-// Insert a row to the DB
-$sql =  "INSERT INTO articles VALUES ('2018-11-23', 'Pantalla Plasma', 'Metropolitana', 'Santiago Centro', 2, 3, '1lzamora2009@gmail.com')";
-
-if ($conn->query($sql) === TRUE){
-    echo "Values Inserted Succesfully";
-}
-
-else{
-    echo "Error: " . $sql . "<br>" . $conn->error;
-}
-
-// Close Connection
-$conn -> close();
-echo "Connection Closed<br>";
-*/
-
-
 echo "Starting Query...<br><br>";
 
-//$sql = "SELECT id, nombre, descripcion, fecha_ingreso, comuna_entrega, calle_numero, nombre_contacto, email_contacto, fono_contacto FROM articulo ORDER BY id DESC LIMIT 5";
-$sql = "SELECT * FROM articulo ORDER BY id DESC LIMIT 5";
+$sql = "SELECT articulo.nombre AS articulo_nombre, fecha_ingreso, region.nombre AS region_entrega, comuna.nombre AS comuna_entrega, email_contacto,
+        (SELECT COUNT(comentario.comentario) FROM comentario) AS commentsQuantity, (SELECT COUNT(fotografia.id) FROM fotografia) AS photosQuantity
+        FROM articulo, comuna, region
+        WHERE articulo.comuna_id = comuna.id AND comuna.region_id = region.id
+        ORDER BY articulo.id DESC LIMIT 5";
+
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0){
@@ -78,12 +64,12 @@ if ($result->num_rows > 0){
 
 
     while ($row = $result->fetch_assoc()){
-        echo "<tr><td>" . $row["fecha_ingreso"] . "</td><td>" . $row["nombre"] . "</td><td>" .
-            //"<td></td>" . $row["region"] . "<td></td>" . $row["comuna"] .
-            //"<td></td>" . $row["commentsQuantity"] . "<td></td>" . $row["photosQuantity"] .
+        $fecha = preg_split( "/[\s]+/" ,$row["fecha_ingreso"])[0];
+        echo "<tr><td>" . $fecha . "</td><td>" . $row["articulo_nombre"] . "</td>" .
+            "<td>" . $row["region_entrega"] . "</td><td>" . $row["comuna_entrega"] . "</td>" .
+            "<td>" . $row["commentsQuantity"] . "</td><td>" . $row["photosQuantity"] . "</td>" .
             "</td><td>" . $row["email_contacto"] . "</td></tr>";
     }
-
     echo "</table>";
 }
 
