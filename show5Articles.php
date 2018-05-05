@@ -130,7 +130,6 @@ echo "<form action='show5Articles.php' method='post'>
 
 ?>
 
-
 <!--
 <br>
 <br>
