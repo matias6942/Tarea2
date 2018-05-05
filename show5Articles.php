@@ -23,31 +23,74 @@
 <!--Tabla de 5 articulos-->
 <?php
 
-$host = "127.0.0.1";
-$username = "client";
-$password = "gYzlLqRJEQQi0j0E";
-$db = "tarea2";
-$port = "3306";
+/**
+ * Creates a connection to apache web server and returns the result of a query.
+ *
+ * @param string $sql [required] SQL Query
+ * @return Query Result
+ *
+ */
+
+function queryResult($sql){
+
+    $host = "127.0.0.1";
+    $username = "client";
+    $password = "gYzlLqRJEQQi0j0E";
+    $db = "tarea2";
+    $port = "3306";
 
 // Create connection
-$conn = new mysqli($host, $username, $password, $db);
+    $conn = new mysqli($host, $username, $password, $db);
 
 // Check connection
-if ($conn -> connect_error){
-    die("Connection Failed ". $conn->connect_error);
+    if ($conn -> connect_error){
+        die("Connection Failed ". $conn->connect_error);
+    }
+
+    echo "Connected Successfully to DataBase<br><br>";
+
+    $result = $conn->query($sql);
+    $conn->close();
+    return $result;
 }
 
-echo "Connected Successfully<br><br>";
+/**
+ * @param $counter int Set the offset to show the 5 previous or the 5 next articles by id
+ */
 
-echo "Starting Query...<br><br>";
+function queryByIndex($counter){
+    $index = $counter*5;
+    $sql = "SELECT articulo.nombre AS articulo_nombre, fecha_ingreso, region.nombre AS region_entrega,
+        comuna.nombre AS comuna_entrega, email_contacto,
+        (SELECT COUNT(comentario.comentario) FROM comentario) AS commentsQuantity, (SELECT COUNT(fotografia.id) FROM fotografia) AS photosQuantity
+        FROM articulo, comuna, region
+        WHERE articulo.comuna_id = comuna.id AND comuna.region_id = region.id
+        ORDER BY articulo.id DESC LIMIT 5," . $index;
+    return queryResult($sql);
+}
 
-$sql = "SELECT articulo.nombre AS articulo_nombre, fecha_ingreso, region.nombre AS region_entrega, comuna.nombre AS comuna_entrega, email_contacto,
+if(isset($_POST["next5Articles"])){
+    $counter++;
+    $result = queryByIndex($counter);
+}
+
+elseif (isset($_POST["previous5Articles"])){
+    $counter--;
+    if ($counter < 0){
+        $counter = 0;
+    }
+    $result = queryByIndex($counter);
+}
+
+else{
+    $sql = "SELECT articulo.nombre AS articulo_nombre, fecha_ingreso, region.nombre AS region_entrega, comuna.nombre AS comuna_entrega, email_contacto,
         (SELECT COUNT(comentario.comentario) FROM comentario) AS commentsQuantity, (SELECT COUNT(fotografia.id) FROM fotografia) AS photosQuantity
         FROM articulo, comuna, region
         WHERE articulo.comuna_id = comuna.id AND comuna.region_id = region.id
         ORDER BY articulo.id DESC LIMIT 5";
-
-$result = $conn->query($sql);
+    $counter = 0;
+    $result = queryResult($sql);
+}
 
 if ($result->num_rows > 0){
 
@@ -77,11 +120,15 @@ else {
     echo "0 Results!";
 }
 
-$conn->close();
-echo "<br><br>Finish!"
+echo "<form action='show5Articles.php' method='post'>
+        <input type='submit' name='next5Articles' value='5 Siguientes'><br>
+</form>";
+
+echo "<form action='show5Articles.php' method='post'>
+        <input type='submit' name='previous5Articles' value='5 Anteriores'><br>
+</form>";
 
 ?>
-
 
 <!--
 <br>
