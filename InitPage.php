@@ -9,9 +9,9 @@
 -->
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-    <meta charset="UTF-8">
+    <meta http-equiv="Content-Type" content="text/html; charset="utf-8">
     <title>Reciclaje - Home</title>
 </head>
 <body>
@@ -22,6 +22,8 @@
 
 <!--Tabla de 5 articulos-->
 <?php
+
+ini_set("default_charset", "UTF-8");
 
 /**
  * Creates a connection to apache web server and returns the result of a query.
@@ -40,6 +42,7 @@ function queryResult($sql){
 
 // Create connection
     $conn = new mysqli($host, $username, $password, $db);
+    mysqli_set_charset($conn,"utf8");
 
 // Check connection
     if ($conn -> connect_error){
@@ -47,7 +50,6 @@ function queryResult($sql){
     }
 
     echo "Connected Successfully to MySQL DataBase<br><br>";
-
     $result = $conn->query($sql);
     $conn->close();
     return $result;
@@ -108,6 +110,7 @@ if ($result->num_rows > 0){
 
     while ($row = $result->fetch_assoc()){
         $fecha = preg_split( "/[\s]+/" ,$row["fecha_ingreso"])[0];
+
         echo "<tr><td>" . $fecha . "</td><td>" . $row["articulo_nombre"] . "</td>" .
             "<td>" . $row["region_entrega"] . "</td><td>" . $row["comuna_entrega"] . "</td>" .
             "<td>" . $row["commentsQuantity"] . "</td><td>" . $row["photosQuantity"] . "</td>" .
@@ -120,12 +123,12 @@ else {
     echo "0 Results!";
 }
 
-echo "<form action='show5Articles.php' method='post'>
+echo "<form action='InitPage.php' method='post'>
         <input type='hidden' name='counter' value=$counter>
         <input type='submit' name='next5Articles' value='5 Siguientes'><br>
 </form>";
 
-echo "<form action='show5Articles.php' method='post'>
+echo "<form action='InitPage.php' method='post'>
         <input type='hidden' name='counter' value=$counter>
         <input type='submit' name='previous5Articles' value='5 Anteriores'><br>
 </form>";
