@@ -105,17 +105,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     if (empty($_POST["fono-contacto"])){
         $fono = "";
     } else{
-        $fono = test_input($fono);
-        if (!preg_match("/^[0-9]+$/", $fono)){
-            $fonoErr = "Solo se permiten números y el signo +!";
+        $fono = test_input($_POST["fono-contacto"]);
+        $codePosition = strpos($fono, "+56");
+        $subNumber = substr($fono, intval($codePosition)+3);
+        $bIsChileanNumber = $codePosition == 0 && strlen($subNumber) == 9;
+        if (!$bIsChileanNumber){
+            $fonoErr = "Sólo se validan los Fonos de Contacto que sigan el formato +56 XXX XXX XXX";
         }
+
+
     }
 }
 ?>
 
 <form name="AddArticleForm" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"
-      onsubmit="FormValidation(NameValidation(),DescriptionValidation(),ValidatePhoto(), StreetNumberValidation(),
-      ValidateSelection(), ValidateContactName(), ValidateEmail(), ValidatePhone()); return false">
+      onsubmit="return FormValidation(NameValidation(),DescriptionValidation(),ValidatePhoto(), StreetNumberValidation(),
+      ValidateSelection(), ValidateContactName(), ValidateEmail(), ValidatePhone())">
 
     Nombre del Artículo:<br>
     <input name="nombre-articulo" type="text" size="40" maxlength="80" minlength="2" value="<?php echo $nombreArticulo;?>">
