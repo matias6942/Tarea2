@@ -18,14 +18,6 @@
 
 function FormValidation(CheckName, CheckDescription, CheckPhotos, CheckRegionComuna, CheckStreetNumber, CheckContactName, CheckEmail, CheckPhone) {
     bFormValidation = CheckName && CheckDescription && CheckPhotos && CheckStreetNumber && CheckRegionComuna && CheckContactName && CheckEmail && CheckPhone;
-    if (bFormValidation){
-        //window.location.assign("InitPage.php");
-        alert("Redirigimos a la Init Page");
-        window.location.assign("AddArticle.php");
-    }
-    else {
-        alert("Uno o más campos ingresados contienen errores")
-    }
     return bFormValidation;
 }
 

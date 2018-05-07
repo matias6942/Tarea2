@@ -31,12 +31,10 @@ function queryResult($sql){
         die("Connection Failed: ". $conn->connect_error);
     }
 
-    echo "Connected Successfully to MySQL DataBase<br><br>";
     $result = $conn->query($sql);
     $conn->close();
     return $result;
 }
-
 
 /**
  * Delete spaces at the begining and at the end, delete backslashes

@@ -86,7 +86,7 @@ if ($result->num_rows > 0){
             "<td>" . $row["commentsQuantity"] . "</td><td>" . $row["photosQuantity"] . "</td>" .
             "</td><td>" . $row["email_contacto"] . "</td></tr>";
     }
-    echo "</table>";
+    echo "</table><br><br>";
 }
 
 else {
@@ -96,7 +96,7 @@ else {
 echo "<form action='InitPage.php' method='post'>
         <input type='hidden' name='counter' value=$counter>
         <input type='submit' name='next5Articles' value='5 Siguientes'><br>
-</form>";
+</form><br>";
 
 echo "<form action='InitPage.php' method='post'>
         <input type='hidden' name='counter' value=$counter>

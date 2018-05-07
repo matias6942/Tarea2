@@ -176,6 +176,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         $stmt1->close();
         $conn->close();
 
+        Header("Location: InitPage.php");
+        exit();
     }
 }
 ?>
