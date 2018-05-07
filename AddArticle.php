@@ -1,6 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="es">
 <head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <meta http-equiv="Content-Type" content="text/html; charset="utf-8">
     <title>Reciclaje - Agregar</title>
     <style>
@@ -9,6 +10,7 @@
     </style>
 </head>
 <body>
+<script src="ValidationScripts.js"></script>
 <h1>Ingrese un Nuevo Artículo</h1>
 
 <?php
@@ -103,15 +105,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     if (empty($_POST["fono-contacto"])){
         $fono = "";
     } else{
-        $fono = test_input($fono);
-        if (!preg_match("/^[0-9]+$/", $fono)){
-            $fonoErr = "Solo se permiten números y el signo +!";
+        $fono = test_input($_POST["fono-contacto"]);
+        $codePosition = strpos($fono, "+56");
+        $subNumber = substr($fono, intval($codePosition)+3);
+        $bIsChileanNumber = $codePosition == 0 && strlen($subNumber) == 9;
+        if (!$bIsChileanNumber){
+            $fonoErr = "Sólo se validan los Fonos de Contacto que sigan el formato +56 XXX XXX XXX";
         }
+
+
     }
 }
 ?>
 
-<form method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+<form name="AddArticleForm" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"
+      onsubmit="return FormValidation(NameValidation(),DescriptionValidation(),ValidatePhoto(), StreetNumberValidation(),
+      ValidateSelection(), ValidateContactName(), ValidateEmail(), ValidatePhone())">
 
     Nombre del Artículo:<br>
     <input name="nombre-articulo" type="text" size="40" maxlength="80" minlength="2" value="<?php echo $nombreArticulo;?>">
@@ -123,7 +132,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     <span class="error"> <?php echo $descripcionArticuloErr;?></span>
     <br><br>
 
-    <!--Fotos-->
+    Fotografías:<br>
+    <input type="file" name="foto-articulo[1]" accept="image/*"><button onclick="AddNewPhoto(); return false;">Agregar otra Fotografía</button>
+    <input type="file" name="foto-articulo[2]" accept="image/*" style="display: none"><br>
+    <input type="file" name="foto-articulo[3]" accept="image/*" style="display: none"><br>
+    <input type="file" name="foto-articulo[4]" accept="image/*" style="display: none"><br>
+    <input type="file" name="foto-articulo[5]" accept="image/*" style="display: none"><br><br>
 
     Región y Comuna de Entrega:<br>
     <select name="region-articulo" id="regiones"></select>

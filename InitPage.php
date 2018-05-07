@@ -137,7 +137,7 @@ echo "<form action='InitPage.php' method='post'>
 
 <br>
 <br>
-<form action="AddArticle2.php">
+<form action="AddArticle.php">
     <input type="submit" value="Informar Nuevo Artículo">
 </form>
 
