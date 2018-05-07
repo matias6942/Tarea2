@@ -131,6 +131,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
     if ($bFormIsFine){
 
+        // Get comuna_id give the user input
+        $sql = "SELECT comuna.id FROM comuna WHERE comuna.nombre = '$comuna'" ;
+        $auxRow = queryResult($sql)->fetch_assoc();
+
+        if (!$auxRow){
+            echo "No se pudo obtener el id de la comuna";
+        }
+
+        $comuna_id_aux = $auxRow['id'];
+
+        // Update articulo give the user input
         $host = "127.0.0.1";
         $username = "client";
         $password = "gYzlLqRJEQQi0j0E";
@@ -145,31 +156,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
             die("Connection Failed: ". $conn->connect_error);
         }
 
-        echo "Connected Successfully to MySQL DataBase<br><br>";
-
         // Prepare and Bind
-        $stmt1 = $conn->prepare("INSERT INTO articulo (nombre, descripcion, fecha_ingreso, 
-        comuna_entrega, calle_numero, nombre_contacto, email_contacto, fono_contacto) VALUES (?,?,?,?,?,?,?,?)");
-        //date("Y-m-d")
-        //$stmt1->bind_param("ssssssss", $nombreArticulo, $descripcionArticulo, "2018-03-11", $comuna,
-          //  $calle, $nombreContacto, $email, $fono);
+        $stmt1 = $conn->prepare("INSERT INTO articulo (nombre, descripcion, fecha_ingreso,
+        calle_numero, nombre_contacto, email_contacto, fono_contacto, comuna_id) VALUES (?,?,?,?,?,?,?,?)");
 
-        $stmt1->bind_param("ssssssss", $nombre, $descripcion, $fecha_ingreso, $comuna_entrega,
-            $calle_numero, $nombre_contacto, $email_contacto, $fono_contacto);
+        $stmt1->bind_param("sssssssi", $nombre, $descripcion, $fecha_ingreso,
+            $calle_numero, $nombre_contacto, $email_contacto, $fono_contacto, $comuna_id);
 
         $nombre = $nombreArticulo;
         $descripcion = $descripcionArticulo;
         $fecha_ingreso = date("Y-m-d");
-        $comuna_entrega = $comuna;
         $calle_numero = $calle;
         $nombre_contacto = $nombreContacto;
         $email_contacto = $email;
         $fono_contacto = $fono;
+        $comuna_id = $comuna_id_aux;
 
         $stmt1->execute();
         $stmt1->close();
         $conn->close();
-        echo "Inserción Realizada! :D :D!";
 
     }
 }
