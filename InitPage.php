@@ -135,13 +135,11 @@ echo "<form action='InitPage.php' method='post'>
 
 ?>
 
-<!--
 <br>
 <br>
-<form action="AddArticle.html">
+<form action="AddArticle.php">
     <input type="submit" value="Informar Nuevo Artículo">
 </form>
--->
 
 </body>
 
