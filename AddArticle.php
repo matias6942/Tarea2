@@ -176,13 +176,64 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         $stmt1->close();
         $conn->close();
 
-        Header("Location: InitPage.php");
-        exit();
+
+
+        //$HTML_fileName = "foto-articulo1";
+        $target_dir = "uploads/";
+        function imagePHPValidation($HTML_fileName, $target_dir){
+
+            //File Handling
+            $target_file = $target_dir . basename($_FILES[$HTML_fileName]["name"]);
+            echo "Target File: <br><br>";
+            echo basename($_FILES[$HTML_fileName]["name"]);
+
+
+            $uploadOk = 1;
+            $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+
+            // File Validation
+            if (isset($_POST["submit"])){
+                $check = getimagesize($_FILES[$HTML_fileName]["tmp_name"]);
+                if ($check !== false){
+                    $uploadOk = 1;
+                } else{
+                    echo "El archivo subido no es una imagen!";
+                    $uploadOk = 0;
+                }
+            }
+
+            //Check if a file already exists
+            if (file_exists($target_file)){
+                echo "Este archivo ya existe!";
+                $uploadOk = 0;
+            }
+
+            //Check file size
+            if ($_FILES[$HTML_fileName]["size"] > 500000){
+                echo "El Archivo es demasiado Grande!";
+                $uploadOk = 0;
+            }
+
+            //Check format
+            if ($imageFileType != "jpg" && $imageFileType != "png" &&
+                $imageFileType != "jpeg" && $imageFileType != "gif"){
+                echo "Solo se admiten las extensiones de archivos .jpg .png .jpeg y .gif!";
+                $uploadOk = 0;
+            }
+
+            if ($uploadOk == 1){
+                if (move_uploaded_file($_FILES[$HTML_fileName]["tmp_name"], $target_file)){
+                    Header("Location: InitPage.php");
+                    exit();
+                }
+            }
+        }
+
     }
 }
 ?>
 
-<form name="AddArticleForm" method="post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"
+<form name="AddArticleForm" method="post" enctype="multipart/form-data" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>"
       onsubmit="return FormValidation(NameValidation(),DescriptionValidation(),ValidatePhoto(), StreetNumberValidation(),
       ValidateSelection(), ValidateContactName(), ValidateEmail(), ValidatePhone())">
 
@@ -197,11 +248,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     <br><br>
 
     Fotografías:<br>
-    <input type="file" name="foto-articulo[1]" accept="image/*"><button onclick="AddNewPhoto(); return false;">Agregar otra Fotografía</button>
-    <input type="file" name="foto-articulo[2]" accept="image/*" style="display: none"><br>
-    <input type="file" name="foto-articulo[3]" accept="image/*" style="display: none"><br>
-    <input type="file" name="foto-articulo[4]" accept="image/*" style="display: none"><br>
-    <input type="file" name="foto-articulo[5]" accept="image/*" style="display: none"><br><br>
+    <input type="file" name="foto-articulo1" accept="image/*"><button onclick="AddNewPhoto(); return false;">Agregar otra Fotografía</button>
+    <input type="file" name="foto-articulo2" accept="image/*" style="display: none"><br>
+    <input type="file" name="foto-articulo3" accept="image/*" style="display: none"><br>
+    <input type="file" name="foto-articulo4" accept="image/*" style="display: none"><br>
+    <input type="file" name="foto-articulo5" accept="image/*" style="display: none"><br><br>
 
     Región y Comuna de Entrega:<br>
     <select name="region-articulo" id="regiones"></select>
@@ -226,27 +277,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     <input name="fono-contacto" type="text" size="20" maxlength="20">
     <span class="error"> <?php echo $fonoErr;?></span><br><br>
 
-    <br><br><input type="submit" name="Ingresar Este Artículo"><br><br>
+    <br><br><input type="submit" name="submit" value="Ingresar Este Artículo"><br><br>
 </form>
-
-<?php
-echo $nombreArticulo;
-echo "<br>";
-echo $descripcionArticulo;
-echo "<br>";
-echo $region;
-echo "<br>";
-echo $comuna;
-echo "<br>";
-echo $calle;
-echo "<br>";
-echo $nombreContacto;
-echo "<br>";
-echo $email;
-echo "<br>";
-echo $fono;
-?>
-
 </body>
 </html>
 
