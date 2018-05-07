@@ -22,38 +22,8 @@
 
 <!--Tabla de 5 articulos-->
 <?php
-
+include 'phpFunctions.php';
 ini_set("default_charset", "UTF-8");
-
-/**
- * Creates a connection to apache web server and returns the result of a query.
- *
- * @param string $sql [required] SQL Query
- * @return Query Result
- *
- */
-
-function queryResult($sql){
-
-    $host = "127.0.0.1";
-    $username = "client";
-    $password = "gYzlLqRJEQQi0j0E";
-    $db = "tarea2";
-
-// Create connection
-    $conn = new mysqli($host, $username, $password, $db);
-    mysqli_set_charset($conn,"utf8");
-
-// Check connection
-    if ($conn -> connect_error){
-        die("Connection Failed: ". $conn->connect_error);
-    }
-
-    echo "Connected Successfully to MySQL DataBase<br><br>";
-    $result = $conn->query($sql);
-    $conn->close();
-    return $result;
-}
 
 if(isset($_POST["next5Articles"])){
     $counter = $_POST["counter"];
@@ -116,7 +86,7 @@ if ($result->num_rows > 0){
             "<td>" . $row["commentsQuantity"] . "</td><td>" . $row["photosQuantity"] . "</td>" .
             "</td><td>" . $row["email_contacto"] . "</td></tr>";
     }
-    echo "</table>";
+    echo "</table><br><br>";
 }
 
 else {
@@ -126,7 +96,7 @@ else {
 echo "<form action='InitPage.php' method='post'>
         <input type='hidden' name='counter' value=$counter>
         <input type='submit' name='next5Articles' value='5 Siguientes'><br>
-</form>";
+</form><br>";
 
 echo "<form action='InitPage.php' method='post'>
         <input type='hidden' name='counter' value=$counter>
