@@ -21,20 +21,7 @@
  * Time: 11:59 PM
  */
 
-
-/**
- * Delete spaces at the begining and at the end, delete backslashes
- * and prevents Cross-site Scripting attacks.
- * @param $data User Input
- * @return string Sanitized User Input
- */
-
-function test_input($data){
-    $data = trim($data);
-    $data = stripslashes($data);
-    $data = htmlspecialchars($data);
-    return $data;
-}
+include 'phpFunctions.php';
 
 $nombreArticuloErr = $descripcionArticuloErr = $regionErr = $comunaErr =
 $calleErr = $nombreContactoErr = $emailErr = $fonoErr = "";
@@ -45,12 +32,26 @@ $nombreArticulo = $descripcionArticulo = $region = $comuna = $calle =
 
 if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
+    $bFormIsFine = false;
+
+    $bnombreArticuloIsFine = false;
+    $bdescripcionIsFine = true;
+    $regionIsFine = false;
+    $bcomunaIsFine = false;
+    $bcalleIsFine = false;
+    $bnombreContactoIsFine = false;
+    $bemailIsFine = false;
+    $fonoIsFine = true;
+
     if (empty($_POST["nombre-articulo"])){
         $nombreArticuloErr = "Ingrese un nombre para el artículo!";
     } else{
         $nombreArticulo = test_input($_POST["nombre-articulo"]);
         if (!preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñüÜ ]*$/", $nombreArticulo)){
             $nombreArticuloErr = "Solo se permiten letras y espacios en blanco!";
+        } else{
+            $bnombreArticuloIsFine = true;
+
         }
     }
 
@@ -59,6 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     } else{
         $descripcionArticulo = test_input($_POST["descripcion-articulo"]);
         if (!preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñüÜ0-9 ]*$/", $descripcionArticulo)){
+            $bdescripcionIsFine = false;
             $descripcionArticuloErr = "Solo se permiten letras, números y espacios en blanco!";
         }
     }
@@ -67,12 +69,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         $regionErr = "Seleccione una Región!";
     } else{
         $region = test_input($_POST["region-articulo"]);
+        $regionIsFine = true;
     }
 
     if (empty($_POST["comuna-articulo"])){
         $comunaErr = "Seleccione una Comuna!";
     } else{
         $comuna = test_input($_POST["comuna-articulo"]);
+        $bcomunaIsFine = true;
     }
 
     if (empty($_POST["calle-articulo"])){
@@ -81,6 +85,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         $calle = test_input($_POST["calle-articulo"]);
         if (!preg_match("/^[a-zA-ZáéíóúÁÉÍÓÚñüÜ0-9 ]*$/", $calle)){
             $calleErr = "Solo se permiten letras, números y espacios en blanco!";
+        } else{
+            $bcalleIsFine = true;
         }
     }
 
@@ -90,6 +96,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         $nombreContacto = test_input($_POST["nombre-contacto"]);
         if (!preg_match("/^[a-zA-Z ]*$/", $nombreContacto)){
             $nombreContactoErr = "Solo se permiten letras y espacios en blanco!";
+        } else{
+            $bnombreContactoIsFine = true;
         }
     }
 
@@ -99,6 +107,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         $email = test_input($_POST["email-contacto"]);
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)){
             $emailErr = "Ingrese un Email Válido!";
+        } else{
+            $bemailIsFine = true;
         }
     }
 
@@ -111,8 +121,55 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
         $bIsChileanNumber = $codePosition == 0 && strlen($subNumber) == 9;
         if (!$bIsChileanNumber){
             $fonoErr = "Sólo se validan los Fonos de Contacto que sigan el formato +56 XXX XXX XXX";
+            $fonoIsFine = false;
+        }
+    }
+
+    $bFormIsFine = $bnombreArticuloIsFine && $bdescripcionIsFine &&
+        $regionIsFine && $bcomunaIsFine && $bcalleIsFine &&
+        $bnombreContactoIsFine && $bemailIsFine && $fonoIsFine;
+
+    if ($bFormIsFine){
+
+        $host = "127.0.0.1";
+        $username = "client";
+        $password = "gYzlLqRJEQQi0j0E";
+        $db = "tarea2";
+
+        // Create connection
+        $conn = new mysqli($host, $username, $password, $db);
+        mysqli_set_charset($conn,"utf8");
+
+        // Check connection
+        if ($conn -> connect_error){
+            die("Connection Failed: ". $conn->connect_error);
         }
 
+        echo "Connected Successfully to MySQL DataBase<br><br>";
+
+        // Prepare and Bind
+        $stmt1 = $conn->prepare("INSERT INTO articulo (nombre, descripcion, fecha_ingreso, 
+        comuna_entrega, calle_numero, nombre_contacto, email_contacto, fono_contacto) VALUES (?,?,?,?,?,?,?,?)");
+        //date("Y-m-d")
+        //$stmt1->bind_param("ssssssss", $nombreArticulo, $descripcionArticulo, "2018-03-11", $comuna,
+          //  $calle, $nombreContacto, $email, $fono);
+
+        $stmt1->bind_param("ssssssss", $nombre, $descripcion, $fecha_ingreso, $comuna_entrega,
+            $calle_numero, $nombre_contacto, $email_contacto, $fono_contacto);
+
+        $nombre = $nombreArticulo;
+        $descripcion = $descripcionArticulo;
+        $fecha_ingreso = date("Y-m-d");
+        $comuna_entrega = $comuna;
+        $calle_numero = $calle;
+        $nombre_contacto = $nombreContacto;
+        $email_contacto = $email;
+        $fono_contacto = $fono;
+
+        $stmt1->execute();
+        $stmt1->close();
+        $conn->close();
+        echo "Inserción Realizada! :D :D!";
 
     }
 }
