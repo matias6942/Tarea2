@@ -17,7 +17,6 @@
 </head>
 <body>
 
-
 <h1>Esta Página es el Menú Inicial</h1>
 <h2>Listado con los 5 últimos artículos Ingresados</h2>
 

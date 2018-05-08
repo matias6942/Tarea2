@@ -1,0 +1,73 @@
+body{
+    background: darkgrey;
+    text-align: center;
+
+}
+
+h1{
+    color: orangered;
+    font-style: italic;
+    text-decoration: underline;
+}
+h2{
+    color: orangered;
+    font-style: italic;
+
+}
+
+p{
+    color: orangered;
+    font-style: italic;
+}
+
+table{
+    color: orangered;
+    font-style: italic;
+}
+
+textarea{
+    width: 400px;
+    height: 100px;
+    color: orangered;
+    font-style: italic;
+}
+form{
+text-align: center;
+color: orangered;
+    font-style: italic;
+}
+
+input[type=text] {
+    padding:5px;
+    border:2px solid #ccc;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    color: orangered;
+}
+
+input[type=text]:focus {
+    border-color:#333;
+    color: orangered;
+}
+
+input[type=submit] {
+    padding:5px 15px;
+    background:#ccc;
+    border:0 none;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    color: orangered;
+}
+
+button{
+    padding:5px 15px;
+    background:#ccc;
+    border:0 none;
+    cursor:pointer;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
+    color: orangered;
+
+}
+
