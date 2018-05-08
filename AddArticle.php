@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <meta http-equiv="Content-Type" content="text/html">
+    <meta charset="UTF-8">
     <title>Reciclaje - Agregar</title>
     <style>
         .error {
@@ -239,7 +239,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
     <br><br>
 
     Descripción:<br>
-    <textarea name="descripcion-articulo" rows="10" cols="50" maxlength="1000" value="<?php echo $descripcionArticulo;?>"></textarea>
+    <textarea name="descripcion-articulo" rows="10" cols="50" maxlength="1000" ></textarea>
     <span class="error"> <?php echo $descripcionArticuloErr;?></span>
     <br><br>
 
