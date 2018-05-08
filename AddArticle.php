@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <meta http-equiv="Content-Type" content="text/html; charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html">
     <title>Reciclaje - Agregar</title>
     <style>
         .error {
