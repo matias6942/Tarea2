@@ -178,54 +178,50 @@ if ($_SERVER["REQUEST_METHOD"] == "POST"){
 
 
 
-        //$HTML_fileName = "foto-articulo1";
+        $HTML_fileName = "foto-articulo1";
         $target_dir = "uploads/";
-        function imagePHPValidation($HTML_fileName, $target_dir){
 
-            //File Handling
-            $target_file = $target_dir . basename($_FILES[$HTML_fileName]["name"]);
-            echo "Target File: <br><br>";
-            echo basename($_FILES[$HTML_fileName]["name"]);
+        //File Handling
+        $target_file = $target_dir . basename($_FILES[$HTML_fileName]["name"]);
 
 
-            $uploadOk = 1;
-            $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
+        $uploadOk = 1;
+        $imageFileType = strtolower(pathinfo($target_file, PATHINFO_EXTENSION));
 
-            // File Validation
-            if (isset($_POST["submit"])){
-                $check = getimagesize($_FILES[$HTML_fileName]["tmp_name"]);
-                if ($check !== false){
-                    $uploadOk = 1;
-                } else{
-                    echo "El archivo subido no es una imagen!";
-                    $uploadOk = 0;
-                }
-            }
-
-            //Check if a file already exists
-            if (file_exists($target_file)){
-                echo "Este archivo ya existe!";
+        // File Validation
+        if (isset($_POST["submit"])){
+            $check = getimagesize($_FILES[$HTML_fileName]["tmp_name"]);
+            if ($check !== false){
+                $uploadOk = 1;
+            } else{
+                echo "El archivo subido no es una imagen!";
                 $uploadOk = 0;
             }
+        }
 
-            //Check file size
-            if ($_FILES[$HTML_fileName]["size"] > 500000){
-                echo "El Archivo es demasiado Grande!";
-                $uploadOk = 0;
-            }
+        //Check if a file already exists
+        if (file_exists($target_file)){
+            echo "Este archivo ya existe!";
+            $uploadOk = 0;
+        }
 
-            //Check format
-            if ($imageFileType != "jpg" && $imageFileType != "png" &&
-                $imageFileType != "jpeg" && $imageFileType != "gif"){
-                echo "Solo se admiten las extensiones de archivos .jpg .png .jpeg y .gif!";
-                $uploadOk = 0;
-            }
+        //Check file size
+        if ($_FILES[$HTML_fileName]["size"] > 500000){
+            echo "El Archivo es demasiado Grande!";
+            $uploadOk = 0;
+        }
 
-            if ($uploadOk == 1){
-                if (move_uploaded_file($_FILES[$HTML_fileName]["tmp_name"], $target_file)){
-                    Header("Location: InitPage.php");
-                    exit();
-                }
+        //Check format
+        if ($imageFileType != "jpg" && $imageFileType != "png" &&
+            $imageFileType != "jpeg" && $imageFileType != "gif"){
+            echo "Solo se admiten las extensiones de archivos .jpg .png .jpeg y .gif!";
+            $uploadOk = 0;
+        }
+
+        if ($uploadOk == 1){
+            if (move_uploaded_file($_FILES[$HTML_fileName]["tmp_name"], $target_file)){
+                Header("Location: InitPage.php");
+                exit();
             }
         }
 
