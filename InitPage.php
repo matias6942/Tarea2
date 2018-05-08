@@ -11,11 +11,11 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset="utf-8">
+    <link rel="stylesheet" href="BlackGreenStyleSheet.css">
+    <meta charset="UTF-8">
     <title>Reciclaje - Home</title>
 </head>
 <body>
-
 
 <h1>Esta Página es el Menú Inicial</h1>
 <h2>Listado con los 5 últimos artículos Ingresados</h2>
@@ -84,7 +84,7 @@ if ($result->num_rows > 0){
         echo "<tr><td>" . $fecha . "</td><td>" . $row["articulo_nombre"] . "</td>" .
             "<td>" . $row["region_entrega"] . "</td><td>" . $row["comuna_entrega"] . "</td>" .
             "<td>" . $row["commentsQuantity"] . "</td><td>" . $row["photosQuantity"] . "</td>" .
-            "</td><td>" . $row["email_contacto"] . "</td></tr>";
+            "<td>" . $row["email_contacto"] . "</td></tr>";
     }
     echo "</table><br><br>";
 }

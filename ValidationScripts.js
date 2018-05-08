@@ -87,8 +87,7 @@ function DescriptionValidation() {
 
 var MaxPhotosNumber = 5;
 var NumberOfPhoto = 1;
-var str1 = "foto-articulo[";
-var str2 = "]";
+var str1 = "foto-articulo";
 
 /**
  *
@@ -104,13 +103,13 @@ function AddNewPhoto() {
     if (NumberOfPhoto == MaxPhotosNumber+1){
         alert("Sólo se pueden subir como máximo 5 fotografías");
     }
-    else if (document.forms["AddArticleForm"][str1.concat(NumberOfPhoto,str2)].value == ""){
+    else if (document.forms["AddArticleForm"][str1.concat(NumberOfPhoto)].value == ""){
         alert("Seleccione una fotografía para asociarla al nuevo artículo");
     }
     else {
         NumberOfPhoto++;
         if (NumberOfPhoto <= MaxPhotosNumber){
-            document.forms["AddArticleForm"][str1.concat(NumberOfPhoto,str2)].style.display='block';
+            document.forms["AddArticleForm"][str1.concat(NumberOfPhoto)].style.display='block';
             return true;
         }
     }
