@@ -11,6 +11,7 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <link rel="stylesheet" href="BlackGreenStyleSheet.css">
     <meta charset="UTF-8">
     <title>Reciclaje - Home</title>
 </head>
